@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en" xmlns:color="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- SmartMenus jQuery Bootstrap 4 Addon CSS -->
+    <link href="../addons/bootstrap-4/jquery.smartmenus.bootstrap-4.css" rel="stylesheet">
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+    <style>
+        .custom-btn {
+            width: 130px;
+            height: 40px;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(226, 17, 17, 0.5),
+            7px 7px 20px 0px rgba(0, 0, 0, .1),
+            4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
+        }
+
+        .btn-6 {
+            background: rgb(64, 36, 36);
+            background: radial-gradient(circle, rgb(82, 30, 57) 0%, rgb(34, 47, 68) 100%);
+            line-height: 42px;
+            padding: 0;
+            border: none;
+        }
+
+        .btn-6 span {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn-6:before,
+        .btn-6:after {
+            position: absolute;
+            content: "";
+            height: 0%;
+            width: 1px;
+            box-shadow: -1px -1px 20px 0px rgb(94, 57, 57),
+            -4px -4px 5px 0px rgb(95, 53, 53),
+            7px 7px 20px 0px rgba(99, 50, 50, 0.4),
+            4px 4px 5px 0px rgba(121, 75, 75, 0.3);
+        }
+
+        .btn-6:before {
+            right: 0;
+            top: 0;
+            transition: all 500ms ease;
+        }
+
+        .btn-6:after {
+            left: 0;
+            bottom: 0;
+            transition: all 500ms ease;
+        }
+
+        .btn-6:hover {
+            background: transparent;
+            color: #243452;
+            box-shadow: none;
+        }
+
+        .btn-6:hover:before {
+            transition: all 500ms ease;
+            height: 100%;
+        }
+
+        .btn-6:hover:after {
+            transition: all 500ms ease;
+            height: 100%;
+        }
+
+        .btn-6 span:before,
+        .btn-6 span:after {
+            position: absolute;
+            content: "";
+            box-shadow: -1px -1px 20px 0px rgb(78, 35, 35),
+            -4px -4px 5px 0px rgb(71, 19, 19),
+            7px 7px 20px 0px rgba(95, 43, 43, 0.4),
+            4px 4px 5px 0px rgba(0, 0, 0, .3);
+        }
+
+        .btn-6 span:before {
+            left: 0;
+            top: 0;
+            width: 0%;
+            height: .5px;
+            transition: all 500ms ease;
+        }
+
+        .btn-6 span:after {
+            right: 0;
+            bottom: 0;
+            width: 0%;
+            height: .5px;
+            transition: all 500ms ease;
+        }
+
+        .btn-6 span:hover:before {
+            width: 100%;
+        }
+
+        .btn-6 span:hover:after {
+            width: 100%;
+        }
+
+        .rightpic {
+            float: left; /* Выравнивание по правому краю */
+            margin: 0 20px 0 0; /* Отступы вокруг фотографии */
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h5 {
+            text-align: center;
+        }
+
+        h4 {
+            text-align: left;
+        }
+
+        div.main {
+            text-align: center;
+        }
+
+    </style>
+    <title>Cinema!</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/sessions}">Cinema<span
+            class="sr-only">(current)</span></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <div>
+        <img th:src="'/'+${sess.name}+'.jpg'" th:width="606" th:high="700" class="rightpic"/>
+        <h1><span th:text="${sess.name}"> </span></h1>
+        <br>
+        <br>
+        <h4><span th:text="${sess.text}"></span></h4>
+        <br>
+        <br>
+        <h5><span th:text="${#temporals.format(sess.create, 'dd-MM-yyyy HH:mm')}"> ></span></h5>
+        <br>
+        <br>
+        <div class="main">
+            <a th:if="${user.name == 'Гость'}" th:href="@{|/formRegistration/${sess.id}|}">
+                <button class="custom-btn btn-6"><span>Купить билет</span></button>
+            </a>
+            <a th:if="${user.name != 'Гость'}" th:href="@{|/ticket/${sess.id}|}">
+                <button class="custom-btn btn-6"><span>Купить билет</span></button>
+            </a>
+        </div>
+    </div>
+    <td>
+    </tbody>
+</table>
+</body>
+</html>
