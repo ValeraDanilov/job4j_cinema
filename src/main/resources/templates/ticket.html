@@ -200,14 +200,15 @@
                     </p>
                 </div>
             </div>
-            <div th:each="tick,iter: ${tickets}" style="text-align: center">
-                <p th:if="${tick != null}">
-                    <a th:if="${tick.condition == false}" th:href="@{/byTickets}">
-                        <button class="custom-btn btn-6">Оплатить</button>
-                    </a>
-                </p>
-            </div>
         </div>
+    </div>
+    <div style="text-align: center">
+        <p th:if="${ticketValueFalse.size() != 0}">
+            <a th:if="${ticketValueFalse.get(0).userId == user.id}" th:href="@{/byTickets}">
+                <br>
+                <button class="custom-btn btn-6">Оплатить</button>
+            </a>
+        </p>
     </div>
     </tbody>
 </table>

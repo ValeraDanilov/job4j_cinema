@@ -2,7 +2,7 @@ package ru.job4j.cinema.service;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
-import ru.job4j.cinema.jdbc.BdTickets;
+import ru.job4j.cinema.jdbc.TicketsRepository;
 import ru.job4j.cinema.model.Ticket;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.Optional;
 @ThreadSafe
 public class TicketService {
 
-    private final BdTickets ticket;
+    private final TicketsRepository ticket;
 
-    public TicketService(BdTickets ticket) {
+    public TicketService(TicketsRepository ticket) {
         this.ticket = ticket;
     }
 
@@ -23,16 +23,10 @@ public class TicketService {
     }
 
     public Ticket[] findSess(int id, int userId) {
-        Optional<List<Ticket>> ticketAll = this.ticket.findAll();
+        List<Ticket> res = this.ticket.findAll().stream().filter(value -> value.getSessId() == id && value.getUserId() == userId).toList();
         Ticket[] tickets = new Ticket[108];
-        if (ticketAll.isPresent()) {
-            List<Ticket> res = ticketAll.get()
-                    .stream()
-                    .filter(value -> value.getSessId() == id && value.getUserId() == userId || value.isCondition())
-                    .toList();
-            for (Ticket tick : res) {
-                tickets[tick.getId()] = tick;
-            }
+        for (Ticket tick : res) {
+            tickets[tick.getId()] = tick;
         }
         return tickets;
     }
@@ -41,7 +35,7 @@ public class TicketService {
         return this.ticket.findById(id, idSess);
     }
 
-    public Optional<List<Ticket>> findByIdUserAndIdSess(int userId, int sessId) {
+    public List<Ticket> findByIdUserAndIdSess(int userId, int sessId) {
         return this.ticket.findByIdUserAndIdSess(userId, sessId);
     }
 

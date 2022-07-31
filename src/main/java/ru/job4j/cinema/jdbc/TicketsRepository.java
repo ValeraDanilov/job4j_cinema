@@ -14,20 +14,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class BdTickets {
+public class TicketsRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BdTickets.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(TicketsRepository.class.getName());
 
     private final BasicDataSource pool;
 
-    public BdTickets(BasicDataSource pool) {
+    public TicketsRepository(BasicDataSource pool) {
         this.pool = pool;
     }
 
     public Optional<Ticket> create(Ticket tickets) {
         try (Connection cn = this.pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "INSERT INTO ticket(ticket_id, session_id, pos_row, cell, user_id, date, condition)" +
+                     "INSERT INTO ticket(ticket_id, sessid, row, cell, userid, date, condition)" +
                              " VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, tickets.getId());
             ps.setInt(2, tickets.getSessId());
@@ -49,39 +49,36 @@ public class BdTickets {
         return Optional.empty();
     }
 
-    public Optional<List<Ticket>> findAll() {
+    public List<Ticket> findAll() {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection cn = this.pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select * from ticket")) {
+             PreparedStatement ps = cn.prepareStatement("select * from ticket t order by t.id")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     tickets.add(createTicketFromResultSe(it));
                 }
             }
-            tickets.sort(Comparator.comparing(Ticket::getId));
-            return Optional.of(tickets);
         } catch (Exception eo) {
             LOGGER.error(eo.getMessage(), eo);
         }
-        return Optional.empty();
+        return tickets;
     }
 
     private Ticket createTicketFromResultSe(ResultSet it) throws SQLException {
         int id = it.getInt("ticket_id");
-        int sessId = it.getInt("session_id");
-        int posRow = it.getInt("pos_row");
+        int sessId = it.getInt("sessId");
+        int row = it.getInt("row");
         int cell = it.getInt("cell");
-        int userId = it.getInt("user_id");
+        int userId = it.getInt("userId");
         LocalDateTime date = it.getTimestamp("date").toLocalDateTime();
         boolean condition = it.getBoolean("condition");
-        return new Ticket(id, sessId, posRow, cell, userId, date, condition);
-
+        return new Ticket(id, sessId, row, cell, userId, date, condition);
     }
 
     public Optional<Ticket> findById(int id, int idSess) {
         try (Connection cn = this.pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "SELECT * FROM ticket WHERE ticket_id = ? and session_id = ? and condition = true")) {
+                     "SELECT * FROM ticket WHERE ticket_id = ? and sessId = ? and condition = true")) {
             ps.setInt(1, id);
             ps.setInt(2, idSess);
             try (ResultSet it = ps.executeQuery()) {
@@ -95,10 +92,10 @@ public class BdTickets {
         return Optional.empty();
     }
 
-    public Optional<List<Ticket>> findByIdUserAndIdSess(int userId, int sessId) {
+    public List<Ticket> findByIdUserAndIdSess(int userId, int sessId) {
         List<Ticket> tickets = new ArrayList<>();
         try (Connection cn = this.pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket WHERE user_id = ? and session_id = ?")) {
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM ticket WHERE userId = ? and sessId = ?")) {
             ps.setInt(1, userId);
             ps.setInt(2, sessId);
             try (ResultSet it = ps.executeQuery()) {
@@ -106,12 +103,10 @@ public class BdTickets {
                     tickets.add(createTicketFromResultSe(it));
                 }
             }
-            tickets.sort(Comparator.comparing(Ticket::getId));
-            return Optional.of(tickets);
         } catch (Exception eo) {
             LOGGER.error(eo.getMessage(), eo);
         }
-        return Optional.empty();
+        return tickets;
     }
 
     public boolean update(Ticket ticket) {
@@ -123,7 +118,7 @@ public class BdTickets {
             ps.setInt(2, ticket.getId());
             ps.executeUpdate();
             pr.setInt(1, ticket.getId());
-           return pr.executeUpdate() > 0;
+            return pr.executeUpdate() > 0;
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             return false;

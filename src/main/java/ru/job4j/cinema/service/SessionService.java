@@ -2,8 +2,8 @@ package ru.job4j.cinema.service;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
-import ru.job4j.cinema.jdbc.BdSessions;
-import ru.job4j.cinema.model.Sessions;
+import ru.job4j.cinema.jdbc.SessionsRepository;
+import ru.job4j.cinema.model.Session;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,29 +13,29 @@ import java.util.Optional;
 @ThreadSafe
 public class SessionService {
 
-    private final BdSessions bdSessions;
+    private final SessionsRepository bdSessions;
 
-    public SessionService(BdSessions bdSessions) {
+    public SessionService(SessionsRepository bdSessions) {
         this.bdSessions = bdSessions;
     }
 
-    public Optional<List<Sessions>> findAll() {
+    public List<Session> findAll() {
         return this.bdSessions.findAll();
     }
 
-    public Optional<Sessions> create(Sessions sessions) throws SQLException {
+    public Optional<Session> create(Session sessions) {
         return this.bdSessions.create(sessions);
     }
 
-    public Optional<Sessions> findById(int id) {
+    public Optional<Session> findById(int id) {
         return this.bdSessions.findById(id);
     }
 
-    public boolean update(Sessions sessions) {
+    public boolean update(Session sessions) {
        return this.bdSessions.update(sessions);
     }
 
-    public boolean delete(Sessions sessions) {
+    public boolean delete(Session sessions) {
        return this.bdSessions.delete(sessions);
     }
 }

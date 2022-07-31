@@ -13,20 +13,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class BdUser {
+public class UserRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BdUser.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRepository.class.getName());
 
     private final BasicDataSource pool;
 
-    public BdUser(BasicDataSource pool) {
+    public UserRepository(BasicDataSource pool) {
         this.pool = pool;
     }
 
     public Optional<User> createUser(User user) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "INSERT INTO users(username, email, phone, password) VALUES (?, ?, ?, ?)",
+                     "INSERT INTO users(name, email, numberphone, password) VALUES (?, ?, ?, ?)",
                      Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
@@ -51,12 +51,7 @@ public class BdUser {
              PreparedStatement ps = cn.prepareStatement("select * from users")) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    int id = it.getInt("id");
-                    String name = it.getString("name");
-                    String email = it.getString("email");
-                    String phone = it.getString("phone");
-                    String passwords = it.getString("password");
-                    users.add(new User(id, name, email, phone, passwords));
+                    users.add(createUserFromResultSe(it));
                 }
             }
         } catch (Exception eo) {
@@ -74,18 +69,21 @@ public class BdUser {
             ps.setString(2, password);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
-                    int id = it.getInt("id");
-                    String name = it.getString("username");
-                    String emails = it.getString("email");
-                    String phone = it.getString("phone");
-                    String passwords = it.getString("password");
-                    User user = new User(id, name, emails, phone, passwords);
-                    return Optional.of(user);
+                    return Optional.of(createUserFromResultSe(it));
                 }
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
         return Optional.empty();
+    }
+
+    private User createUserFromResultSe(ResultSet it) throws SQLException {
+        int id = it.getInt("id");
+        String name = it.getString("name");
+        String emails = it.getString("email");
+        String phone = it.getString("numberphone");
+        String passwords = it.getString("password");
+        return new User(id, name, emails, phone, passwords);
     }
 }

@@ -3,19 +3,19 @@ package ru.job4j.cinema.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Sessions {
+public class Session {
 
     private int id;
     private String name;
     private String text;
-    private LocalDateTime create;
+    private LocalDateTime created;
     private String data;
 
-    public Sessions(int id, String name, String text, LocalDateTime create, String data) {
+    public Session(int id, String name, String text, LocalDateTime created, String data) {
         this.id = id;
         this.name = name;
         this.text = text;
-        this.create = create;
+        this.created = created;
         this.data = data;
     }
 
@@ -44,11 +44,11 @@ public class Sessions {
     }
 
     public LocalDateTime getCreate() {
-        return create;
+        return created;
     }
 
-    public void setCreate(LocalDateTime create) {
-        this.create = create;
+    public void setCreate(LocalDateTime created) {
+        this.created = created;
     }
 
     public String getData() {
@@ -59,7 +59,7 @@ public class Sessions {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Sessions session = (Sessions) o;
+        Session session = (Session) o;
         return id == session.id;
     }
 
@@ -74,7 +74,7 @@ public class Sessions {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
-                ", create=" + create +
+                ", created=" + created +
                 ", data='" + data + '\'' +
                 '}';
     }
