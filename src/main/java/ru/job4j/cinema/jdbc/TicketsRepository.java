@@ -27,15 +27,14 @@ public class TicketsRepository {
     public Optional<Ticket> create(Ticket tickets) {
         try (Connection cn = this.pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "INSERT INTO ticket(ticket_id, sessid, row, cell, userid, date, condition)" +
-                             " VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, tickets.getId());
-            ps.setInt(2, tickets.getSessId());
-            ps.setInt(3, tickets.getRow());
-            ps.setInt(4, tickets.getCell());
-            ps.setInt(5, tickets.getUserId());
-            ps.setTimestamp(6, Timestamp.valueOf(tickets.getDate()));
-            ps.setBoolean(7, tickets.isCondition());
+                     "INSERT INTO ticket(sessid, row, cell, userid, date, condition)" +
+                             " VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, tickets.getSessId());
+            ps.setInt(2, tickets.getRow());
+            ps.setInt(3, tickets.getCell());
+            ps.setInt(4, tickets.getUserId());
+            ps.setTimestamp(5, Timestamp.valueOf(tickets.getDate()));
+            ps.setBoolean(6, tickets.isCondition());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -65,7 +64,7 @@ public class TicketsRepository {
     }
 
     private Ticket createTicketFromResultSe(ResultSet it) throws SQLException {
-        int id = it.getInt("ticket_id");
+        int id = it.getInt("id");
         int sessId = it.getInt("sessId");
         int row = it.getInt("row");
         int cell = it.getInt("cell");
@@ -75,12 +74,13 @@ public class TicketsRepository {
         return new Ticket(id, sessId, row, cell, userId, date, condition);
     }
 
-    public Optional<Ticket> findById(int id, int idSess) {
+    public Optional<Ticket> findById(int row, int cell, int idSess) {
         try (Connection cn = this.pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "SELECT * FROM ticket WHERE ticket_id = ? and sessId = ? and condition = true")) {
-            ps.setInt(1, id);
-            ps.setInt(2, idSess);
+                     "SELECT * FROM ticket WHERE row = ? and cell = ? and sessId = ? and condition = true")) {
+            ps.setInt(1, row);
+            ps.setInt(2, cell);
+            ps.setInt(3, idSess);
             try (ResultSet it = ps.executeQuery()) {
                 if (it.next()) {
                     return Optional.of(createTicketFromResultSe(it));
@@ -111,9 +111,9 @@ public class TicketsRepository {
 
     public boolean update(Ticket ticket) {
         try (Connection cn = this.pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("update ticket set condition = ? where ticket_id  = ?",
+             PreparedStatement ps = cn.prepareStatement("update ticket set condition = ? where id  = ?",
                      Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement pr = cn.prepareStatement("delete from ticket where ticket_id = ? and condition = false")) {
+             PreparedStatement pr = cn.prepareStatement("delete from ticket where id = ? and condition = false")) {
             ps.setBoolean(1, ticket.isCondition());
             ps.setInt(2, ticket.getId());
             ps.executeUpdate();
@@ -127,7 +127,7 @@ public class TicketsRepository {
 
     public boolean delete(Ticket ticket) {
         try (Connection cn = this.pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("delete from ticket where ticket_id = ?")) {
+             PreparedStatement ps = cn.prepareStatement("delete from ticket where id = ?")) {
             ps.setInt(1, ticket.getId());
             return ps.executeUpdate() > 0;
         } catch (Exception eo) {

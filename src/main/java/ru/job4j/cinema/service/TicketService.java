@@ -26,13 +26,15 @@ public class TicketService {
         List<Ticket> res = this.ticket.findAll().stream().filter(value -> value.getSessId() == id && value.getUserId() == userId).toList();
         Ticket[] tickets = new Ticket[108];
         for (Ticket tick : res) {
-            tickets[tick.getId()] = tick;
+            int cell = tick.getCell() - 1;
+            int row = (tick.getRow() - 1) * 12 + cell;
+            tickets[row] = tick;
         }
         return tickets;
     }
 
-    public Optional<Ticket> findById(int id, int idSess) {
-        return this.ticket.findById(id, idSess);
+    public Optional<Ticket> findById(int row, int cell, int idSess) {
+        return this.ticket.findById(row, cell, idSess);
     }
 
     public List<Ticket> findByIdUserAndIdSess(int userId, int sessId) {

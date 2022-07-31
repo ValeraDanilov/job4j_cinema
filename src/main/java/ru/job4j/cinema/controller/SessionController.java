@@ -141,16 +141,16 @@ public class SessionController {
     }
 
     @GetMapping("/formChooseTicket/{id}")
-    public String session(@PathVariable("id") int id) {
-        Optional<Ticket> tick = this.store.findById(id, this.idSess.get());
+    public String chooseTicket(@PathVariable("id") int id) {
+        int row = (id + 1) / 12;
+        int cell = (id + 1) % 12;
+        if (cell == 0) {
+            cell = 12;
+        } else {
+            row++;
+        }
+        Optional<Ticket> tick = this.store.findById(row, cell, this.idSess.get());
         if (tick.isEmpty()) {
-            int row = (id + 1) / 12;
-            int cell = (id + 1) % 12;
-            if (cell == 0) {
-                cell = 12;
-            } else {
-                row++;
-            }
             tick = Optional.of(new Ticket(id,
                     this.idSess.get(),
                     row, cell, this.idUser.get(),

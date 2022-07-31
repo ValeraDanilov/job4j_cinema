@@ -18,7 +18,6 @@ CREATE TABLE sessions
 CREATE TABLE ticket
 (
     id         SERIAL PRIMARY KEY,
-    ticket_id  INT NOT NULL,
     sessId INT NOT NULL REFERENCES sessions (id),
     row    INT NOT NULL,
     cell       INT NOT NULL,
