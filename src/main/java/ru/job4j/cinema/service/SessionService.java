@@ -20,22 +20,22 @@ public class SessionService {
     }
 
     public List<Session> findAll() {
-        return this.bdSessions.findAll();
+        return null;
     }
 
     public Optional<Session> create(Session sessions) {
-        return this.bdSessions.create(sessions);
+        return null;
     }
 
     public Optional<Session> findById(int id) {
-        return this.bdSessions.findById(id);
+        return null;
     }
 
     public boolean update(Session sessions) {
-       return this.bdSessions.update(sessions);
+       return false;
     }
 
     public boolean delete(Session sessions) {
-       return this.bdSessions.delete(sessions);
+       return false;
     }
 }

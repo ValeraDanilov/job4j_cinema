@@ -1,5 +1,7 @@
 package ru.job4j.cinema.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -8,15 +10,14 @@ public class Session {
     private int id;
     private String name;
     private String text;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime created;
-    private String data;
 
-    public Session(int id, String name, String text, LocalDateTime created, String data) {
+    public Session(int id, String name, String text, LocalDateTime created) {
         this.id = id;
         this.name = name;
         this.text = text;
         this.created = created;
-        this.data = data;
     }
 
     public int getId() {
@@ -51,10 +52,6 @@ public class Session {
         this.created = created;
     }
 
-    public String getData() {
-        return data;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,12 +67,11 @@ public class Session {
 
     @Override
     public String toString() {
-        return "Sessions{" +
+        return "Session{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
                 ", created=" + created +
-                ", data='" + data + '\'' +
                 '}';
     }
 }

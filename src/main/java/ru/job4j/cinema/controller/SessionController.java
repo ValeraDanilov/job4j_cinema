@@ -1,8 +1,10 @@
 package ru.job4j.cinema.controller;
 
 import net.jcip.annotations.ThreadSafe;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
@@ -11,15 +13,12 @@ import ru.job4j.cinema.service.SessionService;
 import ru.job4j.cinema.service.TicketService;
 
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Controller
 @ThreadSafe
@@ -70,15 +69,13 @@ public class SessionController {
     @GetMapping("/formAddSessions")
     public String addSessions(Model model, HttpSession session) {
         model.addAttribute("sessions",
-                new Session(0, "Заполните поле", "Заполните поле", null, "Заполните поле"));
+                new Session(0, "Заполните поле", "Заполните поле", null));
         sessions(model, session);
         return "addSessions";
     }
 
-    @PostMapping("/createSession")
-    public String createSessions(@ModelAttribute Session sessions) {
-        sessions.setCreate(LocalDateTime.parse(sessions.getData(),
-                DateTimeFormatter.ofPattern("yyyy MM dd HH mm")));
+    @RequestMapping(value = "/createSession", method = RequestMethod.POST)
+    public String createSessions(@ModelAttribute("sessions") Session sessions, BindingResult bindingResult) {
         Optional<Session> sess = this.ses.create(sessions);
         if (sess.isEmpty()) {
             return "redirect:/formAddSessions";
