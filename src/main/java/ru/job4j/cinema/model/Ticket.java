@@ -7,20 +7,22 @@ public class Ticket {
 
     private int id;
     private int sessId;
-    private int row;
+    private int pos_row;
     private int cell;
     private int userId;
     private LocalDateTime date;
     private boolean condition;
+    private double price;
 
-    public Ticket(int id, int sessId, int row, int cell, int userId, LocalDateTime date, boolean condition) {
+    public Ticket(int id, int sessId, int pos_row, int cell, int userId, LocalDateTime date, boolean condition, double price) {
         this.id = id;
         this.sessId = sessId;
-        this.row = row;
+        this.pos_row = pos_row;
         this.cell = cell;
         this.userId = userId;
         this.date = date;
         this.condition = condition;
+        this.price = price;
     }
 
     public int getId() {
@@ -39,12 +41,12 @@ public class Ticket {
         this.sessId = sessId;
     }
 
-    public int getRow() {
-        return row;
+    public int getPos_row() {
+        return pos_row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
+    public void setPos_row(int pos_row) {
+        this.pos_row = pos_row;
     }
 
     public int getCell() {
@@ -79,6 +81,14 @@ public class Ticket {
         this.condition = condition;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,18 +100,5 @@ public class Ticket {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Ticket{" +
-                "id=" + id +
-                ", sessId=" + sessId +
-                ", row=" + row +
-                ", cell=" + cell +
-                ", userId=" + userId +
-                ", date=" + date +
-                ", condition=" + condition +
-                '}';
     }
 }

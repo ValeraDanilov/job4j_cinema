@@ -1,10 +1,8 @@
 package ru.job4j.cinema.controller;
 
 import net.jcip.annotations.ThreadSafe;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.cinema.model.Session;
 import ru.job4j.cinema.model.Ticket;
@@ -29,6 +27,7 @@ public class SessionController {
     private static final String PATH = "redirect:/sessions";
     private final AtomicInteger idUser = new AtomicInteger();
     private final AtomicInteger idSess = new AtomicInteger();
+    private final AtomicInteger count = new AtomicInteger();
 
     public SessionController(SessionService ses, TicketService store) {
         this.ses = ses;
@@ -36,7 +35,7 @@ public class SessionController {
     }
 
     @GetMapping("/sessions")
-    public String sess(Model model, HttpSession session) {
+    public String getSessions(Model model, HttpSession session) {
         List<Session> res = this.ses.findAll();
         model.addAttribute("sess", res);
         sessions(model, session);
@@ -44,7 +43,7 @@ public class SessionController {
     }
 
     @GetMapping("/sessions/{id}")
-    public String session(Model model, @PathVariable Integer id, HttpSession session) {
+    public String sessionName(Model model, @PathVariable Integer id, HttpSession session) {
         this.idSess.set(id);
         Optional<Session> res = this.ses.findById(id);
         if (res.isEmpty()) {
@@ -56,7 +55,7 @@ public class SessionController {
     }
 
     @GetMapping("/formRegistration/{sessId}")
-    public String formDelete(Model model, HttpSession session, @PathVariable("sessId") int id) {
+    public String formRegistration(Model model, HttpSession session, @PathVariable("sessId") int id) {
         Optional<Session> res = this.ses.findById(id);
         if (res.isEmpty()) {
             return PATH;
@@ -75,7 +74,7 @@ public class SessionController {
     }
 
     @RequestMapping(value = "/createSession", method = RequestMethod.POST)
-    public String createSessions(@ModelAttribute("sessions") Session sessions, BindingResult bindingResult) {
+    public String createSessions(@ModelAttribute("sessions") Session sessions) {
         Optional<Session> sess = this.ses.create(sessions);
         if (sess.isEmpty()) {
             return "redirect:/formAddSessions";
@@ -99,17 +98,12 @@ public class SessionController {
     }
 
     @GetMapping("/formDeleteSessions/{sessionId}")
-    public String formDeleteSessions(Model model, @PathVariable("sessionId") int id) {
-        model.addAttribute("sess", this.ses.findById(id));
-        return "deleteSessions";
-    }
-
-    @PostMapping("/deleteSessions")
-    public String deleteSessions(@ModelAttribute Session sessions, @RequestParam("delete") boolean delete) {
-        if (delete) {
-            boolean res = this.ses.delete(sessions);
+    public String deleteSessions(@PathVariable("sessionId") int id) {
+        Optional<Session> resSess = this.ses.findById(id);
+        if (resSess.isPresent()) {
+            boolean res = this.ses.delete(resSess.get());
             if (!res) {
-                return String.format("redirect:/formDeleteSessions/%s", sessions.getId());
+                return String.format("redirect:/formDeleteSessions/%s", resSess.get().getId());
             }
         }
         return PATH;
@@ -131,14 +125,29 @@ public class SessionController {
                 }
             }
         }
+
+        model.addAttribute("count", priceCount(tickets));
+        model.addAttribute("price", priceCount(tickets) * 200);
+        model.addAttribute("sess", this.ses.findById(this.idSess.get()));
         model.addAttribute("tickets", tickets);
-        model.addAttribute("ticketValueFalse", Arrays.stream(tickets).filter(Objects::nonNull).filter(val -> !val.isCondition()).toList());
+        model.addAttribute("ticketValueFalse", Arrays.stream(tickets)
+                .filter(Objects::nonNull)
+                .filter(val -> !val.isCondition()).toList());
         sessions(model, session);
         return "ticket";
     }
 
+    private Long priceCount(Ticket[] tickets) {
+        return Arrays.stream(tickets)
+                .filter(Objects::nonNull)
+                .filter(user -> user.getUserId() == this.idUser.get())
+                .filter(con -> !con.isCondition())
+                .map(Ticket::getPrice).count();
+    }
+
     @GetMapping("/formChooseTicket/{id}")
-    public String chooseTicket(@PathVariable("id") int id) {
+    public String chooseTicket(@PathVariable("id") int id, Model model, HttpSession session) {
+        sessions(model, session);
         int row = (id + 1) / 12;
         int cell = (id + 1) % 12;
         if (cell == 0) {
@@ -146,22 +155,27 @@ public class SessionController {
         } else {
             row++;
         }
-        Optional<Ticket> tick = this.store.findById(row, cell, this.idSess.get());
-        if (tick.isEmpty()) {
+        Optional<Ticket> tick = this.store.findById(row, cell, this.idSess.get(), this.idUser.get());
+        if (tick.isEmpty() || tick.get().getUserId() != this.idUser.get()) {
+            this.count.incrementAndGet();
             tick = Optional.of(new Ticket(id,
                     this.idSess.get(),
                     row, cell, this.idUser.get(),
-                    LocalDateTime.now(), false));
+                    LocalDateTime.now(), false, 200));
             Optional<Ticket> res = this.store.create(tick.get());
             if (res.isEmpty()) {
-                return "redirect:/ticket";
+                return "ticket";
             }
+        } else if (!tick.get().isCondition() && this.idUser.get() == tick.get().getUserId()) {
+            this.store.delete(tick.get());
         }
         return String.format("redirect:/ticket/%s", this.idSess.get());
     }
 
-    @GetMapping("/byTickets")
+    @GetMapping("/successfulPurchase")
     public String byTicket(Model model, HttpSession session) {
+        model.addAttribute("sess", this.idSess.get());
+        sessions(model, session);
         List<Ticket> tickets =
                 this.store.findByIdUserAndIdSess(this.idUser.get(), this.idSess.get());
         if (!tickets.isEmpty()) {
@@ -171,27 +185,16 @@ public class SessionController {
                     this.store.update(ticket);
                 }
             }
+            return "successfulPurchase";
         }
-        model.addAttribute("tickets", tickets);
-        Optional<Session> res = this.ses.findById(this.idSess.get());
-        if (res.isEmpty()) {
-            return PATH;
-        }
-        model.addAttribute("sess", res.get());
-        sessions(model, session);
-        return "byTickets";
-    }
-
-    @GetMapping("/successfulPurchase")
-    public String success() {
-        return String.format("redirect:/ticket/%s", this.idSess.get());
+        return "purchaseNotCompleted";
     }
 
     private void sessions(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             user = new User();
-            user.setName("Гость");
+            user.setName("Guest");
         }
         model.addAttribute("user", user);
         this.idUser.set(user.getId());

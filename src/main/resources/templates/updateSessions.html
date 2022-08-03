@@ -18,6 +18,12 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        .text-Center {
+            text-align: center;
+        }
+    </style>
     <title>Cinema!</title>
 </head>
 <body>
@@ -30,29 +36,31 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" th:href="@{/formAddSessions}">Добавить фильм</a>
+            <a class="nav-item nav-link" th:href="@{/formAddSessions}">Add film</a>
         </div>
     </div>
 </nav>
 <div class="container pt-3">
     <div class="card" style="width: 100%">
         <div class="card-header">
-            Редактирование фильма.
+            Film editing.
         </div>
         <div class="card-body">
             <form th:action="@{/updateSessions}" method="POST" enctype="multipart/form-data"
                   th:object="${sess}">
                 <input type="hidden" name="id" th:field="*{id}"/>
-            <div class="form-group">
-                <label for="name">Имя</label>
-                <input type="text" class="form-control" name="name" id="name" th:field="*{name}">
-            </div>
-            <div class="form-group">
-                <label for="text">Описание</label>
-                <input type="text" class="form-control" name="name" id="text" th:field="*{text}">
-            </div>
-            <br>
-            <button type="submit" class="btn btn-primary">Сохранить</button>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" th:field="*{name}">
+                </div>
+                <div class="form-group">
+                    <label for="text">Description</label>
+                    <input type="text" class="form-control" name="name" id="text" th:field="*{text}">
+                </div>
+                <br>
+                <div class="text-Center">
+                    <button type="submit" class="btn btn-dark">Save</button>
+                </div>
             </form>
         </div>
     </div>

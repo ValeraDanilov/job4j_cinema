@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -30,28 +29,6 @@
     <title>Cinema!</title>
 
     <style>
-        .container-my {
-            max-width: 600px;
-            position: relative;
-            margin-left: auto;
-            margin-right: auto;
-            padding-right: 15px;
-            padding-left: 15px;
-        }
-
-        .main {
-            text-align: center;
-        }
-
-        .container-new {
-            max-width: 750px;
-            background-color: #d1d2d4;
-            position: relative;
-            margin-left: auto;
-            margin-right: auto;
-            padding-right: 15px;
-            padding-left: 15px;
-        }
 
         .custom-btn {
             width: 130px;
@@ -160,6 +137,28 @@
         .btn-6 span:hover:after {
             width: 100%;
         }
+
+        .container {
+            max-width: 100%;
+
+        }
+
+        .container div:nth-child(1) {
+            word-wrap: break-word;
+            max-width: 800px;
+            float: left;
+        }
+
+        .container div:nth-child(2) {
+            max-width: 750px;
+            float: top;
+            background-color: #d1d2d4;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
     </style>
 </head>
 <body>
@@ -175,12 +174,38 @@
     <thead>
     </thead>
     <tbody>
-    <div class="container-new">
-        <div class="main">
-            <img th:src="'/'+Экран.jpg"/>
+    <div class="container">
+        <div class="container-right">
+            <h3>INFORMATION</h3><br>
+            <h5> Name User:</h5>
+            <p style="text-align: left" th:text="${user.name}"></p>
+            <h5> Name Film:</h5>
+            <p style="text-align: left" th:text="${sess.get().name}"></p>
+            <h5> Date:</h5>
+            <p style="text-align: left" th:text="${#temporals.format(sess.get().created, 'yyyy.MM.dd HH:mm')}"></p>
+            <h5><img th:src="'/'+red.png" th:width="40" th:high="40"/> - Busy place:</h5>
+            <h5><img th:src="'/'+blue.png" th:width="40" th:high="40"/> - Your booked seat</h5>
+            <h5><img th:src="'/'+grean.png" th:width="40" th:high="40"/> - Free place</h5>
+            <h5>Seats selected:</h5>
+            <p style="text-align: left" th:text="${count}"></p>
+            <h5>To pay: </h5>
+            <p style="text-align: left" th:text="${price}"></p>
+
+
+            <div style="text-align: center">
+                <p th:if="${ticketValueFalse.size() != 0 && ticketValueFalse.get(0).userId == user.id}">
+                    <a th:href="@{/successfulPurchase}">
+                        <br>
+                        <button type="button" class="custom-btn btn-6">
+                            Оплатить
+                        </button>
+                    </a>
+                </p>
+            </div>
         </div>
         <div class="container-my ">
-            <div class="row" style="margin: 0">
+            <img th:src="'/'+Экран.jpg"/>
+            <div class="row">
                 <div class="col-1" th:each="tick,iter: ${tickets}"
                      style="margin: 0; padding: 0; border: 0;">
                     <p th:if="${tick == null}">
@@ -193,7 +218,7 @@
                             <img th:src="'/'+red.jpg" class="img-fluid"
                                  style="width: 50px; height:50px;"/>
                         </a>
-                        <a th:if="${tick.condition == false}">
+                        <a th:if="${tick.condition == false}" th:href="@{|/formChooseTicket/${iter.index}|}">
                             <img th:if="${tick.userId == user.id}" th:src="'/'+blue.jpg" class="img-fluid"
                                  style="width: 50px; height:50px;"/>
                         </a>
@@ -203,10 +228,10 @@
         </div>
     </div>
     <div style="text-align: center">
-        <p th:if="${ticketValueFalse.size() != 0}">
-            <a th:if="${ticketValueFalse.get(0).userId == user.id}" th:href="@{/byTickets}">
+        <p>
+            <a th:href="@{|/ticket/${sessId}|}">
                 <br>
-                <button class="custom-btn btn-6">Оплатить</button>
+                <button class="custom-btn btn-6">Refresh</button>
             </a>
         </p>
     </div>

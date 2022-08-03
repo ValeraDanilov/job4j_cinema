@@ -10,7 +10,7 @@ public class Session {
     private int id;
     private String name;
     private String text;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime created;
 
     public Session(int id, String name, String text, LocalDateTime created) {
@@ -44,11 +44,11 @@ public class Session {
         this.text = text;
     }
 
-    public LocalDateTime getCreate() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreate(LocalDateTime created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 

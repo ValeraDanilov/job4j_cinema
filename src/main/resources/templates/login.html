@@ -35,17 +35,16 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" th:if="${user.name == 'Admin'}" th:href="@{/formAddSessions}">Добавить
-                фильм<span
+            <a class="nav-item nav-link" th:if="${user.name == 'Admin'}" th:href="@{/formAddSessions}">Add film<span
                         class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/registration}">Регистрация</a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+            <a class="nav-item nav-link" th:if="${user.name == 'Guest'}" th:href="@{/registration}">Registration</a>
+            <a class="nav-item nav-link" th:if="${user.name == 'Guest'}" th:href="@{/loginPage}">
                 <span th:text="${user.name}"></span>
-                <span> | Войти</span>
+                <span> | Sign in</span>
             </a>
-            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+            <a class="nav-item nav-link" th:if="${user.name != 'Guest'}" th:href="@{/logout}">
                 <span th:text="${user.name}"></span>
-                <span> | Выйти</span>
+                <span> | Sign out</span>
             </a>
         </div>
     </div>
@@ -53,23 +52,23 @@
 <div class="container pt-3">
     <div class="card" style="width: 100%">
         <div class="card-header">
-            Авторизация
+            Log in
         </div>
         <div class="card-body">
             <div th:if="${fail}" class="alert alert-danger" role="alert">
-                Логин или пароль введены не верно!
+                Username or password entered incorrectly!
             </div>
             <form th:action="@{/login}" method="POST">
                 <div class="form-group">
-                    <label>Почта</label>
+                    <label>Mail</label>
                     <input type="text" class="form-control" name="email">
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
+                    <label>Password</label>
                     <input type="text" class="form-control" name="password">
                 </div>
                 <div class="main">
-                    <button type="submit" class="btn btn-dark">Войти</button>
+                    <button type="submit" class="btn btn-dark">Sign in</button>
                 </div>
             </form>
         </div>

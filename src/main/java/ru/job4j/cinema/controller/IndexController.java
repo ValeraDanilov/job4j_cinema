@@ -15,7 +15,7 @@ public class IndexController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             user = new User();
-            user.setName("Гость");
+            user.setName("Guest");
         }
         model.addAttribute("user", user);
         return "index";

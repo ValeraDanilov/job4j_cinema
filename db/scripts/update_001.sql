@@ -17,11 +17,12 @@ CREATE TABLE sessions
 
 CREATE TABLE ticket
 (
-    id         SERIAL PRIMARY KEY,
-    sessId INT NOT NULL REFERENCES sessions (id),
-    row    INT NOT NULL,
-    cell       INT NOT NULL,
+    id        SERIAL PRIMARY KEY,
+    sessId    INT NOT NULL REFERENCES sessions (id),
+    pos_row   INT NOT NULL,
+    cell      INT NOT NULL,
     userId    INT NOT NULL REFERENCES users (id),
-    date       timestamp,
-    condition  boolean default false
+    date      timestamp,
+    condition boolean default false,
+    price     double precision
 );

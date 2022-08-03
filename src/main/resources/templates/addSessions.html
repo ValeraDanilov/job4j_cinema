@@ -35,32 +35,32 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" th:href="@{/addSessions}">Добавить фильм<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" th:href="@{/addSessions}">Add film<span class="sr-only">(current)</span></a>
         </div>
     </div>
 </nav>
 <div class="container">
     <div class="card" style="width: 100%">
         <div class="card-header">
-            Добавить новый фильм.
+            Add film.
         </div>
         <div class="card-body">
             <form th:action="@{/createSession}" enctype="multipart/form-data" method="POST" th:object="${sessions}">
                 <input type="hidden" name="id" value="0"/>
                 <div class="form-group">
-                    <label for="name">Имя</label>
+                    <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name">
                 </div>
                 <div class="form-group">
-                    <label for="text">Описание</label>
+                    <label for="text">Description</label>
                     <input type="text" class="form-control" name="text" id="text">
                 </div>
                 <div class="form-group">
-                    <label for="created">Установить время начала трансляции</label>
-                    <input type="date" id="created" th:value="*{create}" th:field="*{create}"/>
+                    <label for="created">Set broadcast start time</label>
+                    <input type="datetime-local" id="created" th:field="*{{created}}" th:value="*{created}"/>
                 </div>
                 <div class="main">
-                    <button type="submit" class="btn btn-dark">Сохранить</button>
+                    <button type="submit" class="btn btn-dark">Save</button>
                 </div>
             </form>
         </div>

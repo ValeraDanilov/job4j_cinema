@@ -43,17 +43,16 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" th:if="${user.name == 'Admin'}" th:href="@{/formAddSessions}">Добавить
-                фильм<span
+            <a class="nav-item nav-link" th:if="${user.name == 'Admin'}" th:href="@{/formAddSessions}">Add film<span
                         class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/registration}">Регистрация</a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+            <a class="nav-item nav-link" th:if="${user.name == 'Guest'}" th:href="@{/registration}">Registration</a>
+            <a class="nav-item nav-link" th:if="${user.name == 'Guest'}" th:href="@{/loginPage}">
                 <span th:text="${user.name}"></span>
-                <span> | Войти</span>
+                <span> | Sign in</span>
             </a>
-            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+            <a class="nav-item nav-link" th:if="${user.name != 'Guest'}" th:href="@{/logout}">
                 <span th:text="${user.name}"></span>
-                <span> | Выйти</span>
+                <span> | Sign out</span>
             </a>
         </div>
     </div>
@@ -74,11 +73,38 @@
                    th:href="@{|/formUpdateSessions/${sessions.id}|}">
                     <i class="fa fa-edit"></i>
                 </a>
-                <a th:if="${user.name == 'Admin'}"
-                   th:href="@{|/formDeleteSessions/${sessions.id}|}">
-                    <i class="fa fa-trash"></i>
-                </a>
-            </p></h6>
+
+                <i th:if="${user.name == 'Admin'}"
+                   class="fa fa-trash" data-toggle="modal" data-target="#exampleModal"></i>
+
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Delete session?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-footer">
+
+                                <div class="del" style="display: inline-block;">
+                                    <a th:if="${user.name == 'Admin'}"
+                                       th:href="@{|/formDeleteSessions/${sessions.id+1}|}">
+                                        <button type="button" class="btn btn-primary">Yes</button>
+                                    </a>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Not</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </p></h6>
         </div>
     </div>
     </tbody>

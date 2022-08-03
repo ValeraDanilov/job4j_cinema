@@ -133,9 +133,8 @@
         }
 
         .rightpic {
-            float: left; /* Выравнивание по правому краю */
-            margin: 0 20px 0 0; /* Отступы вокруг фотографии */
-            height: 100vh;
+            float: left;
+            margin: 0 20px 0 0;
         }
 
         h1 {
@@ -171,22 +170,24 @@
     </thead>
     <tbody>
     <div>
-        <img th:src="'/'+${sess.name}+'.jpg'" th:width="606" th:high="700" class="rightpic"/>
+        <div class="rightpic">
+            <img th:src="'/'+${sess.name}+'.jpg'"/>
+        </div>
         <h1><span th:text="${sess.name}"> </span></h1>
         <br>
         <br>
         <h4><span th:text="${sess.text}"></span></h4>
         <br>
         <br>
-        <h5><span th:text="${#temporals.format(sess.create, 'dd-MM-yyyy HH:mm')}"> ></span></h5>
+        <h5><span th:text="${#temporals.format(sess.created, 'yyyy.MM.dd HH:mm')}"> ></span></h5>
         <br>
         <br>
         <div class="main">
             <a th:if="${user.name == 'Гость'}" th:href="@{|/formRegistration/${sess.id}|}">
-                <button class="custom-btn btn-6"><span>Купить билет</span></button>
+                <button class="custom-btn btn-6"><span>To buy a ticket</span></button>
             </a>
             <a th:if="${user.name != 'Гость'}" th:href="@{|/ticket/${sess.id}|}">
-                <button class="custom-btn btn-6"><span>Купить билет</span></button>
+                <button class="custom-btn btn-6"><span>To buy a ticket</span></button>
             </a>
         </div>
     </div>

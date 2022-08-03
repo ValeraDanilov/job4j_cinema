@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.job4j.cinema.jdbc.SessionsRepository;
 import ru.job4j.cinema.model.Session;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,22 +19,22 @@ public class SessionService {
     }
 
     public List<Session> findAll() {
-        return null;
+        return this.bdSessions.findAll();
     }
 
     public Optional<Session> create(Session sessions) {
-        return null;
+        return this.bdSessions.create(sessions);
     }
 
     public Optional<Session> findById(int id) {
-        return null;
+        return this.bdSessions.findById(id);
     }
 
     public boolean update(Session sessions) {
-       return false;
+        return this.bdSessions.update(sessions);
     }
 
     public boolean delete(Session sessions) {
-       return false;
+        return this.bdSessions.delete(sessions);
     }
 }

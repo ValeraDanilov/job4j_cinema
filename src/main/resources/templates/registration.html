@@ -35,17 +35,16 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link" th:if="${user.name == 'Admin'}" th:href="@{/formAddSessions}">Добавить
-                фильм<span
+            <a class="nav-item nav-link" th:if="${user.name == 'Admin'}" th:href="@{/formAddSessions}">Add film<span
                         class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/registration}">Регистрация</a>
-            <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+            <a class="nav-item nav-link" th:if="${user.name == 'Guest'}" th:href="@{/registration}">Registration</a>
+            <a class="nav-item nav-link" th:if="${user.name == 'Guest'}" th:href="@{/loginPage}">
                 <span th:text="${user.name}"></span>
-                <span> | Войти</span>
+                <span> | Sign in</span>
             </a>
-            <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+            <a class="nav-item nav-link" th:if="${user.name != 'Guest'}" th:href="@{/logout}">
                 <span th:text="${user.name}"></span>
-                <span> | Выйти</span>
+                <span> | Sing out</span>
             </a>
         </div>
     </div>
@@ -54,30 +53,30 @@
     <div class="card" style="width: 100%">
         <div class="card-body">
             <div th:if="${fail}" id="my-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
-                Пользователь с такими данными уже существует
+                User with such data already exists
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <form th:action="@{/registration}" method="POST">
                 <div class="form-group">
-                    <label>Имя</label>
+                    <label>Name</label>
                     <input type="text" class="form-control" name="name">
                 </div>
                 <div class="form-group">
-                    <label>Почта</label>
+                    <label>Mail</label>
                     <input type="text" class="form-control" name="email">
                 </div>
                 <div class="form-group">
-                    <label>Номер телефона</label>
+                    <label>Phone number</label>
                     <input type="text" class="form-control" name="numberPhone">
                 </div>
                 <div class="form-group">
-                    <label>Пароль</label>
+                    <label>Password</label>
                     <input type="text" class="form-control" name="password">
                 </div>
                 <div class="main">
-                    <button type="submit" class="btn btn-dark">Продолжить</button>
+                    <button type="submit" class="btn btn-dark">Next</button>
                 </div>
             </form>
         </div>

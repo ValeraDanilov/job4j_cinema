@@ -23,18 +23,28 @@ public class TicketService {
     }
 
     public Ticket[] findSess(int id, int userId) {
-        List<Ticket> res = this.ticket.findAll().stream().filter(value -> value.getSessId() == id && value.getUserId() == userId).toList();
+        List<Ticket> res = this.ticket.findAll()
+                .stream()
+                .filter(value -> {
+                    if (value.getUserId() == userId && value.getSessId() == id) {
+                        return true;
+                    } else if (value.getSessId() == id && value.isCondition()) {
+                        return true;
+                    }
+                    return false;
+                })
+                .toList();
         Ticket[] tickets = new Ticket[108];
         for (Ticket tick : res) {
             int cell = tick.getCell() - 1;
-            int row = (tick.getRow() - 1) * 12 + cell;
+            int row = (tick.getPos_row() - 1) * 12 + cell;
             tickets[row] = tick;
         }
         return tickets;
     }
 
-    public Optional<Ticket> findById(int row, int cell, int idSess) {
-        return this.ticket.findById(row, cell, idSess);
+    public Optional<Ticket> findById(int row, int cell, int idSess, int idUser) {
+        return this.ticket.findById(row, cell, idSess, idUser);
     }
 
     public List<Ticket> findByIdUserAndIdSess(int userId, int sessId) {
