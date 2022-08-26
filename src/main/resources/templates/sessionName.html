@@ -184,10 +184,10 @@
         <br>
         <div class="main">
             <a th:if="${user.name == 'Гость'}" th:href="@{|/formRegistration/${sess.id}|}">
-                <button class="custom-btn btn-6"><span>To buy a ticket</span></button>
+                <button class="custom-btn btn-6"><span>Buy ticket</span></button>
             </a>
             <a th:if="${user.name != 'Гость'}" th:href="@{|/ticket/${sess.id}|}">
-                <button class="custom-btn btn-6"><span>To buy a ticket</span></button>
+                <button class="custom-btn btn-6"><span>Buy ticket</span></button>
             </a>
         </div>
     </div>

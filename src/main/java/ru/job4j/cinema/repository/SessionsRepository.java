@@ -1,4 +1,4 @@
-package ru.job4j.cinema.jdbc;
+package ru.job4j.cinema.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
@@ -25,8 +25,8 @@ public class SessionsRepository {
 
     public Optional<Session> create(Session sessions) {
         try (Connection cn = this.pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO sessions(name, text, created)" +
-                     " VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = cn.prepareStatement("INSERT INTO sessions(name, text, created)"
+                     + " VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, sessions.getName());
             ps.setString(2, sessions.getText());
             ps.setTimestamp(3, Timestamp.valueOf(sessions.getCreated()));

@@ -7,17 +7,18 @@ public class Ticket {
 
     private int id;
     private int sessId;
-    private int pos_row;
+    private int posRow;
     private int cell;
     private int userId;
     private LocalDateTime date;
     private boolean condition;
     private double price;
 
-    public Ticket(int id, int sessId, int pos_row, int cell, int userId, LocalDateTime date, boolean condition, double price) {
+    @SuppressWarnings("checkstyle:parameternumber")
+    public Ticket(int id, int sessId, int posRow, int cell, int userId, LocalDateTime date, boolean condition, double price) {
         this.id = id;
         this.sessId = sessId;
-        this.pos_row = pos_row;
+        this.posRow = posRow;
         this.cell = cell;
         this.userId = userId;
         this.date = date;
@@ -41,12 +42,12 @@ public class Ticket {
         this.sessId = sessId;
     }
 
-    public int getPos_row() {
-        return pos_row;
+    public int getPosRow() {
+        return posRow;
     }
 
-    public void setPos_row(int pos_row) {
-        this.pos_row = pos_row;
+    public void setPosRow(int posRow) {
+        this.posRow = posRow;
     }
 
     public int getCell() {
@@ -91,8 +92,12 @@ public class Ticket {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Ticket ticket = (Ticket) o;
         return id == ticket.id;
     }

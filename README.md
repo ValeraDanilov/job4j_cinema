@@ -85,11 +85,10 @@
         Будет выполнена миграция БД с помощью Liquibase.<br>
     </li>
     <li>
-        Зайдите в класс Main и запустите приложение, после чего перейдите по данной ссылке.<br>
+        Команда для запуска из консоли <code>java -jar target/job4j_cinema-1.0.jar</code> после чего перейдите по данной ссылке.<br>
         <a href="http://localhost:8080/sessions/">http://localhost:8080/sessions</a>
     </li>
 </ol>
-
 <h2><a name="usage">Использование</a>&nbsp;&nbsp;<a href="#menu">&#9650;</a></h2>
 <h3><a name="hall">Главная страница</a>&nbsp;&nbsp;<a href="#menu">&#9650;</a></h3>
 <p>
@@ -144,6 +143,7 @@
 <p style="text-align: center">
   <img src="img/img6.png" height="400" title="покупка билета">
   <img src="img/img7.png"  title="покупка билета">
+  <img src="img/img9.png"  title="занятое место">
 </p>
 <p>
 Если во время оплаты ваши места купит уже кто-то другой, то вам предложат выбрать новые места.

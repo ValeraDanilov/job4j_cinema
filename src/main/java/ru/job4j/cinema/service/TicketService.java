@@ -2,7 +2,7 @@ package ru.job4j.cinema.service;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
-import ru.job4j.cinema.jdbc.TicketsRepository;
+import ru.job4j.cinema.repository.TicketsRepository;
 import ru.job4j.cinema.model.Ticket;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class TicketService {
         Ticket[] tickets = new Ticket[108];
         for (Ticket tick : res) {
             int cell = tick.getCell() - 1;
-            int row = (tick.getPos_row() - 1) * 12 + cell;
+            int row = (tick.getPosRow() - 1) * 12 + cell;
             tickets[row] = tick;
         }
         return tickets;

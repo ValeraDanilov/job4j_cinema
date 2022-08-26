@@ -1,4 +1,4 @@
-package ru.job4j.cinema.jdbc;
+package ru.job4j.cinema.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
@@ -26,10 +26,10 @@ public class TicketsRepository {
     public Optional<Ticket> create(Ticket tickets) {
         try (Connection cn = this.pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "INSERT INTO ticket(sessid, pos_row, cell, userid, date, condition, price)" +
-                             " VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                     "INSERT INTO ticket(sessid, posRow, cell, userid, date, condition, price)"
+                             + " VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, tickets.getSessId());
-            ps.setInt(2, tickets.getPos_row());
+            ps.setInt(2, tickets.getPosRow());
             ps.setInt(3, tickets.getCell());
             ps.setInt(4, tickets.getUserId());
             ps.setTimestamp(5, Timestamp.valueOf(tickets.getDate()));
@@ -66,19 +66,19 @@ public class TicketsRepository {
     private Ticket createTicketFromResultSe(ResultSet it) throws SQLException {
         int id = it.getInt("id");
         int sessId = it.getInt("sessId");
-        int pos_row = it.getInt("pos_row");
+        int posRow = it.getInt("posRow");
         int cell = it.getInt("cell");
         int userId = it.getInt("userId");
         LocalDateTime date = it.getTimestamp("date").toLocalDateTime();
         boolean condition = it.getBoolean("condition");
         double price = it.getDouble("price");
-        return new Ticket(id, sessId, pos_row, cell, userId, date, condition, price);
+        return new Ticket(id, sessId, posRow, cell, userId, date, condition, price);
     }
 
     public Optional<Ticket> findById(int row, int cell, int idSess, int idUser) {
         try (Connection cn = this.pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "SELECT * FROM ticket WHERE pos_row = ? and cell = ? and sessId = ? and userid = ?")) {
+                     "SELECT * FROM ticket WHERE posRow = ? and cell = ? and sessId = ? and userid = ?")) {
             ps.setInt(1, row);
             ps.setInt(2, cell);
             ps.setInt(3, idSess);

@@ -2,7 +2,7 @@ package ru.job4j.cinema.service;
 
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
-import ru.job4j.cinema.jdbc.UserRepository;
+import ru.job4j.cinema.repository.UserRepository;
 import ru.job4j.cinema.model.User;
 
 import java.util.List;

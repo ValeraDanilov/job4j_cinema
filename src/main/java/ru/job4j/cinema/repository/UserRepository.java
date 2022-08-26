@@ -1,4 +1,4 @@
-package ru.job4j.cinema.jdbc;
+package ru.job4j.cinema.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;

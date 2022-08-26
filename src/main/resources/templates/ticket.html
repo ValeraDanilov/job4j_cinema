@@ -177,15 +177,15 @@
     <div class="container">
         <div class="container-right">
             <h3>INFORMATION</h3><br>
-            <h5> Name User:</h5>
+            <h5>User Name:</h5>
             <p style="text-align: left" th:text="${user.name}"></p>
-            <h5> Name Film:</h5>
+            <h5> Film Name:</h5>
             <p style="text-align: left" th:text="${sess.get().name}"></p>
-            <h5> Date:</h5>
+            <h5>Date:</h5>
             <p style="text-align: left" th:text="${#temporals.format(sess.get().created, 'yyyy.MM.dd HH:mm')}"></p>
-            <h5><img th:src="'/'+red.png" th:width="40" th:high="40"/> - Busy place:</h5>
-            <h5><img th:src="'/'+blue.png" th:width="40" th:high="40"/> - Your booked seat</h5>
-            <h5><img th:src="'/'+grean.png" th:width="40" th:high="40"/> - Free place</h5>
+            <h5><img th:src="'/'+red.png" th:width="40" th:high="40"/> - Unavailable seat:</h5>
+            <h5><img th:src="'/'+blue.png" th:width="40" th:high="40"/> - Your reserved seat:</h5>
+            <h5><img th:src="'/'+grean.png" th:width="40" th:high="40"/> - Available seat:</h5>
             <h5>Seats selected:</h5>
             <p style="text-align: left" th:text="${count}"></p>
             <h5>To pay: </h5>
@@ -197,7 +197,7 @@
                     <a th:href="@{/successfulPurchase}">
                         <br>
                         <button type="button" class="custom-btn btn-6">
-                            Оплатить
+                            Buy
                         </button>
                     </a>
                 </p>
